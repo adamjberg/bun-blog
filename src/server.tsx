@@ -3,11 +3,6 @@ import { renderToString } from "react-dom/server"
 import { BunPost, BunPostSlug } from "./posts/BunPost"
 import { HomePage } from "./pages/HomePage";
 
-process.on("SIGTERM", () => {
-  console.log("Exiting");
-  process.exit();
-});
-
 Bun.serve({
   fetch(req) {
     const url = new URL(req.url);
