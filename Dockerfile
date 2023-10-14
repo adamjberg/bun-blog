@@ -1,7 +1,5 @@
 FROM oven/bun
 
-STOPSIGNAL SIGSTOP
-
 COPY . .
 
 RUN bun install

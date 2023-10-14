@@ -4,6 +4,7 @@ import { BunPost, BunPostSlug } from "./posts/BunPost"
 import { HomePage } from "./pages/HomePage";
 
 process.on("SIGTERM", () => {
+  console.log("Exiting");
   process.exit();
 });
 
@@ -33,5 +34,7 @@ Bun.serve({
       }
     });
   },
-  port: 8080
-})
+  port: process.env.PORT || 8080
+});
+
+console.log("Listening");
