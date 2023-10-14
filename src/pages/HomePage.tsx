@@ -1,8 +1,8 @@
-import { BunPostSlug } from "../posts/BunPost";
-
-export function HomePage() {
+export function HomePage({ routes }: { routes: any }) {
   return <>
     <h1>Home Page</h1>
-    <a href={BunPostSlug}>Bun Blog</a>
+    {routes.map((route: any) => {
+      return <div><a href={route.slug}>{route.title}</a></div>
+    })}
   </>;
 }

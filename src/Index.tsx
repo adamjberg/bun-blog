@@ -1,10 +1,10 @@
-export function Index({ children }: { children: React.ReactNode }) {
+export function Index({ route }: { route: any }) {
   return <html>
     <head>
-
+      <title>{route.title}</title>
     </head>
     <body>
-      {children}
+      {route.component}
     </body>
     </html>
 }
