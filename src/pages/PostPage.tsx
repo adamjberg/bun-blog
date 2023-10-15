@@ -2,18 +2,26 @@ import { useState } from "react";
 
 type Props = {
   title: string;
-  slug: string;
+  afterTime: string;
+  beforeTime: string;
   content: string;
 }
 
-export async function getServerSideProps(context: {
-  params: { slug: string };
-}) {
+export async function getServerSideProps() {
+  const beforeTime = new Date().toUTCString();
+
+  await new Promise((res) => {
+    setTimeout(res, 1000);
+  });
+
+  const afterTime = new Date().toUTCString();
+
   return {
     props: {
-      title: "Bun Blog",
-      slug: "/bun",
-      content: "<h1>Hello Bun</h1>",
+      title: "Post",
+      content: "<p>Hello Bun</p>",
+      beforeTime,
+      afterTime
     },
   };
 }
@@ -23,15 +31,16 @@ export default function PostPage(props: Props) {
 
   return (
     <>
-      <h1>Post Page</h1>
-      <p>{props.slug}</p>
-      <div
+      <h1>{props.title}</h1>
+      <div>Before: {props.beforeTime}</div>
+      <div>After: {props.afterTime}</div>
+      <button
         onClick={() => {
           setCount(count + 1);
         }}
       >
-        {count}
-      </div>
+        Count: {count}
+      </button>
       <div dangerouslySetInnerHTML={{ __html: props.content }} />
     </>
   );
