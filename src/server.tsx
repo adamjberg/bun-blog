@@ -1,44 +1,35 @@
 import { Index } from "./Index";
 import { renderToString } from "react-dom/server";
-import { BunPost } from "./posts/BunPost";
-import { HomePage } from "./pages/HomePage";
 
 Bun.serve({
-  fetch(req) {
+  async fetch(req) {
     const url = new URL(req.url);
 
-    const routes = [
-      {
-        component: <BunPost />,
-        title: "Hello Bun",
-        slug: "/hello-bun",
-      },
-    ];
-
-    const routeDictionary = routes.reduce((acc: any, route) => {
-      acc[route.slug] = route;
-      return acc;
-    }, {});
-
-    let route = null;
-    if (url.pathname === "/") {
-      route = {
-        component: <HomePage routes={routes} />,
-      };
-    } else {
-      route = routeDictionary[url.pathname];
-    }
-
-    if (!route) {
-      return new Response("", {
-        status: 404,
-        statusText: "Not Found",
+    if (url.pathname === "/index.js") {
+      const buildOutput = await Bun.build({
+        entrypoints: ["./src/BrowserEntry.tsx"],
+        minify: true,
       });
-    }
+
+      return new Response(await buildOutput.outputs[0].text(), {
+        headers: {
+          "Content-Type": "application/javascript",
+        },
+      });
+    }    
+
+    const PostPage = require("./pages/PostPage");
+    const serverSideProps = await PostPage.getServerSideProps({
+      params: {
+        slug: url.pathname,
+      },
+    });
 
     const html = renderToString(
       Index({
-        route,
+        component: <PostPage.default {...serverSideProps.props} />,
+        initialData: serverSideProps.props,
+        title: "Post"
       })
     );
     return new Response(html, {
