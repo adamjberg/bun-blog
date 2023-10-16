@@ -17,9 +17,7 @@ Bun.serve({
         })
       );
       return new Response(html, {
-        headers: {
-          "Content-Type": "text/html",
-        },
+        headers: { "Content-Type": "text/html" },
       });
     } else if (url.pathname === "/index.js") {
       const buildOutput = await Bun.build({
@@ -27,9 +25,7 @@ Bun.serve({
       });
 
       return new Response(await buildOutput.outputs[0].text(), {
-        headers: {
-          "Content-Type": "application/javascript",
-        },
+        headers: { "Content-Type": "application/javascript" },
       });
     } else {
       return new Response("Not found", {
